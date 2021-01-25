@@ -1,0 +1,14 @@
+test: 1.2
+test2 = dave.steve
+test3 = dave:steve
+test4 = "Dave: 2"
+test5 = fun():yes
+test6 = {}:yes
+test7 = !fun
+test8: yes!
+test9 = [!what] & !joy(!here)
+test10 = dave#steve
+test11 = #awesome
+test12 = #1
+test13 = I am so #wasted
+test14 = some1#stop
