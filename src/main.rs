@@ -10,7 +10,7 @@ use std::{
 fn main() -> io::Result<()> {
     let pending_threads = RefCell::new(Vec::new());
 
-    visit_dirs(&Path::new("."), &|entry| {
+    visit_acs_files(&Path::new("."), &|entry| {
         let path = entry.path();
         pending_threads.borrow_mut().push(thread::spawn(move || {
             let cell_delimiters = Regex::new(r#"(?mi)(?:(?:[a-z]+\d*)|")(\.)[a-z]+"#).unwrap();
@@ -62,7 +62,7 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn visit_dirs(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
+fn visit_acs_files(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
     if dir.is_file() {
         return Ok(());
     }
@@ -72,7 +72,7 @@ fn visit_dirs(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
         let path = entry.path();
         let is_file = path.to_str().unwrap().ends_with(&".acs");
         if path.is_dir() {
-            visit_dirs(&path, cb)?;
+            visit_acs_files(&path, cb)?;
         } else if is_file {
             cb(&entry);
         }
