@@ -19,6 +19,7 @@ fn main() -> io::Result<()> {
             let namespace = Regex::new(r#"(?mi)[a-z]\d*(#)[a-z]"#).unwrap();
 
             println!("Reading {:?}", path);
+
             let mut content = fs::read_to_string(&path).unwrap();
             let original = content.clone();
 
@@ -48,10 +49,7 @@ fn main() -> io::Result<()> {
                 content.replace_range(capture.start()..capture.end(), "::");
             }
 
-            println!("Old content:\n{}", original);
-            println!("New content:\n{}", content);
-
-            fs::write(String::from(path.to_str().unwrap()) + ".new", content).expect("Oh noes");
+            fs::write(String::from(path.to_str().unwrap()), content).expect("Oh noes");
         }));
     })?;
 
@@ -62,7 +60,7 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn visit_acs_files(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
+fn visit_acs_files<T: Fn(&DirEntry)>(dir: &Path, cb: &T) -> io::Result<()> {
     if dir.is_file() {
         return Ok(());
     }
