@@ -12,3 +12,5 @@ test11 = #awesome
 test12 = #1
 test13 = I am so #wasted
 test14 = some1#stop
+test15 = "dave." & asd
+test15 = "dave.dave" & asd
