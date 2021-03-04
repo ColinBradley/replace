@@ -14,3 +14,7 @@ test13 = I am so #wasted
 test14 = some1#stop
 test15 = "dave." & asd
 test15 = "dave.dave" & asd
+test16 = dave.dave.dave.dave
+test17 = dave(dave.dave.dave & "dave@(dave.dave).dave")
+test18 = dave:dave:dave:dave
+test19 = dave(dave:dave:dave & "dave@(dave:dave):dave")

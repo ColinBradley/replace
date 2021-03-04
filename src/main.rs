@@ -1,4 +1,4 @@
-use regex::{Match, Regex};
+use regex::Regex;
 use std::{
     cell::RefCell,
     fs::{self, DirEntry},
@@ -13,7 +13,7 @@ fn main() -> io::Result<()> {
     visit_acs_files(&Path::new("."), &|entry| {
         let path = entry.path();
         pending_threads.borrow_mut().push(thread::spawn(move || {
-            let cell_delimiters = Regex::new(r#"(?mi)(?:(?:[a-z]+\d*)|")(\.)[a-z]+"#).unwrap();
+            let cell_delimiters = Regex::new(r#"(?mi)(?:(?:[a-z]\d*)|"|\))(\.)[a-z]"#).unwrap();
             let member_fetch = Regex::new(r#"(?mi)(?:(?:[a-z]\d*)|}|\))(:)[a-z]"#).unwrap();
             let sourced_address = Regex::new(r#"(?mi)(?: |"|\(|\[)(!)[a-z]"#).unwrap();
             let namespace = Regex::new(r#"(?mi)[a-z]\d*(#)[a-z]"#).unwrap();
@@ -24,17 +24,17 @@ fn main() -> io::Result<()> {
             let original = content.clone();
 
             for captures in cell_delimiters.captures_iter(&original) {
-                let capture: Match = captures.get(1).unwrap();
+                let capture = captures.get(1).unwrap();
                 content.replace_range(capture.start()..capture.end(), ":");
             }
 
             for captures in member_fetch.captures_iter(&original) {
-                let capture: Match = captures.get(1).unwrap();
+                let capture = captures.get(1).unwrap();
                 content.replace_range(capture.start()..capture.end(), ".");
             }
 
             for captures in sourced_address.captures_iter(&original) {
-                let capture: Match = captures.get(1).unwrap();
+                let capture = captures.get(1).unwrap();
                 content.replace_range(capture.start()..capture.end(), "~");
             }
 
@@ -45,7 +45,7 @@ fn main() -> io::Result<()> {
                 .iter()
                 .rev()
             {
-                let capture: Match = captures.get(1).unwrap();
+                let capture = captures.get(1).unwrap();
                 content.replace_range(capture.start()..capture.end(), "::");
             }
 
